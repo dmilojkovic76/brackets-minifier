@@ -1,4 +1,4 @@
-# JSMin ([Brackets](https://github.com/adobe/brackets))
+# JSMin for [Brackets](https://github.com/adobe/brackets)
 
 *Minifies JavaScript files in Brackets and saves to `{filename}.min.js`*
 
