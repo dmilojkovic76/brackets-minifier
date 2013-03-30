@@ -1,6 +1,6 @@
 # Minifier for [Brackets](https://github.com/adobe/brackets)
 
-*Minifies JavaScript and CSS files in Brackets and saves to `{filename}.min.js` using Google's Closure Compiler (for JavaScript) and YUI (for CSS).*
+*Minifies JavaScript and CSS files in Brackets and saves to `{filename}.min.{ext}` using Google's Closure Compiler (for JavaScript) and YUI (for CSS).*
 
 ## Installation
 
