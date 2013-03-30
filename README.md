@@ -1,6 +1,6 @@
-# Closure Compiler for [Brackets](https://github.com/adobe/brackets)
+# Minifier for [Brackets](https://github.com/adobe/brackets)
 
-*Minifies JavaScript files in Brackets and saves to `{filename}.min.js` using Google's Closure Compiler*
+*Minifies JavaScript and CSS files in Brackets and saves to `{filename}.min.js` using Google's Closure Compiler (for JavaScript) and YUI (for CSS).*
 
 ## Installation
 
@@ -13,7 +13,7 @@
 Clone this repository into `~/Library/Application Support/Brackets/extensions/user/` and restart Brackets.
 
 ## Usage
-To minify a JavaScript file, use the keyboard shortcut `Cmd/Ctrl+M`. You can also minify JavaScript files on save by checking the corresponding item in the *Edit* menu.
+To minify a file, use the keyboard shortcut `Cmd/Ctrl+M`. You can also minify files on save by checking the corresponding item in the *Edit* menu.
 
 ## Version
 
