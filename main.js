@@ -10,13 +10,19 @@ define(function (require, exports, module) {
         DocumentManager  = brackets.getModule("document/DocumentManager"),
         FileUtils        = brackets.getModule("file/FileUtils"),
         NativeFileSystem = brackets.getModule("file/NativeFileSystem").NativeFileSystem,
+        ProjectManager   = brackets.getModule("project/ProjectManager"),
         CSSMin           = require("cssmin").CSSMin;
     
     var language = $("#status-language").text(),
         code = "",
         result = "",
         delay,
-        auto = localStorage["minifier.auto"] || false; // default to true
+        auto = (localStorage["minifier.auto"] === "true");
+    
+    if (typeof localStorage["minifier.auto"] === "undefined") {
+        auto = false;
+        localStorage["minifier.auto"] = false;
+    }
     
     $("#status-indicators").prepend('<div id="min-status" style="text-align: right;"></div>');
     var tunnel = $("#min-status");
@@ -25,7 +31,23 @@ define(function (require, exports, module) {
         tunnel.text(msg);
     }
     
-    function save(code, path) {
+    function found(name) {
+        var exists = false;
+        $(".jstree-leaf a").each(function () {
+            if ($(this).text().substr(1) === name) {
+                exists = true;
+            }
+        });
+        return exists;
+    }
+    
+    function save(code, path, entry) {
+        var split = path.split("/"),
+            name = split.pop(),
+            dir = split.join("/");
+        if (!found(name)) {
+            ProjectManager.createNewItem(dir, name, true, false);
+        }
         var fileEntry = new NativeFileSystem.FileEntry(path), lineEnding = "\n";
         if (FileUtils.getPlatformLineEndings() === "CRLF") {
             lineEnding = "\r\n";
@@ -51,17 +73,18 @@ define(function (require, exports, module) {
                 data: data
             }).done(function (mini) {
                 var path = file.fullPath.replace(".js", ".min.js");
-                save(mini, path);
+                save(mini, path, file);
                 status("Minified");
                 delay = setTimeout(function () { status(""); }, 1000);
             });
         } else if (lan === "CSS") {
             var mini = CSSMin.go(editor.document.getText());
             var path = file.fullPath.replace(".css", ".min.css");
-            save(mini, path);
+            save(mini, path, file);
             status("Minified");
             delay = setTimeout(function () { status(""); }, 1000);
         }
+        // populate(file);
     }
     
     // Function to run when the menu item is clicked
@@ -96,11 +119,15 @@ define(function (require, exports, module) {
     
     var menu = Menus.getMenu(Menus.AppMenuBar.EDIT_MENU);
     var cmd_min_id = "minifier.min";
-    var cmd_auto_id = "minfier.auto";
+    var cmd_auto_id = "minifier.auto";
     CommandManager.register("Minify JavaScript", cmd_min_id, compile);
-    var automaton = CommandManager.register('Compile on Save', cmd_auto_id, function () {
+    CommandManager.register("Compile on Save", cmd_auto_id, function () {
         this.setChecked(!this.getChecked());
     });
+    
+    var automaton = CommandManager.get(cmd_auto_id);
+    
+    automaton.setChecked(auto);
     
     $(automaton).on('checkedStateChange', function () {
         auto = automaton.getChecked();
@@ -112,6 +139,7 @@ define(function (require, exports, module) {
     menu.addMenuDivider('before', 'minifier.min');
     
     automaton.setChecked(auto);
+    
     console.log(auto);
     
 });
