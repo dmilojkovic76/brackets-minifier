@@ -17,7 +17,7 @@ To minify a file, use the keyboard shortcut `Cmd/Ctrl+M`. You can also minify fi
 
 ## Version
 
-`Version 0.1.0`
+`Version 0.2.0`
 
 ## License
 
