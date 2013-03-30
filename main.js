@@ -1,5 +1,5 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
-/*global define, $, brackets, window, document, clearTimeout, setTimeout */
+/*global define, $, brackets, window, document, clearTimeout, setTimeout, localStorage */
 
 define(function (require, exports, module) {
     "use strict";
@@ -16,7 +16,7 @@ define(function (require, exports, module) {
         code = "",
         result = "",
         delay,
-        auto = false; // default to true
+        auto = localStorage["minifier.auto"] || false; // default to true
     
     $("#status-indicators").prepend('<div id="min-status" style="text-align: right;"></div>');
     var tunnel = $("#min-status");
@@ -95,8 +95,8 @@ define(function (require, exports, module) {
     });
     
     var menu = Menus.getMenu(Menus.AppMenuBar.EDIT_MENU);
-    var cmd_min_id = "compiler.min";
-    var cmd_auto_id = "compiler.auto";
+    var cmd_min_id = "minifier.min";
+    var cmd_auto_id = "minfier.auto";
     CommandManager.register("Minify JavaScript", cmd_min_id, compile);
     var automaton = CommandManager.register('Compile on Save', cmd_auto_id, function () {
         this.setChecked(!this.getChecked());
@@ -104,11 +104,12 @@ define(function (require, exports, module) {
     
     $(automaton).on('checkedStateChange', function () {
         auto = automaton.getChecked();
+        localStorage["minifier.auto"] = auto;
     });
     
-    menu.addMenuItem('compiler.min', "Ctrl-M");
+    menu.addMenuItem('minifier.min', "Ctrl-M");
     menu.addMenuItem(automaton);
-    menu.addMenuDivider('before', 'compiler.min');
+    menu.addMenuDivider('before', 'minifier.min');
     
     automaton.setChecked(auto);
     console.log(auto);
