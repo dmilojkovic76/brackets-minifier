@@ -15,6 +15,10 @@ Clone this repository into `~/Library/Application Support/Brackets/extensions/us
 ## Usage
 To minify a JavaScript file, use the keyboard shortcut `Cmd/Ctrl+M`. You can also minify JavaScript files on save by checking the corresponding item in the *Edit* menu.
 
+## Version
+
+`Version 0.1.0`
+
 ## License
 
 
