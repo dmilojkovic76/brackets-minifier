@@ -1,4 +1,4 @@
-# JSMin for [Brackets](https://github.com/adobe/brackets)
+# Closure Compiler for [Brackets](https://github.com/adobe/brackets)
 
 *Minifies JavaScript files in Brackets and saves to `{filename}.min.js` using Google's Closure Compiler*
 
