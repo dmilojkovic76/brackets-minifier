@@ -6,7 +6,7 @@
 
 1. Run Brackets
 2. Select *File > Install Extension...*
-3. Enter `https://github.com/alfredxing/brackets-jsmin/archive/master.zip` as Extension URL.
+3. Enter `https://github.com/alfredxing/brackets-minifier/archive/master.zip` as Extension URL.
 3. Click Install to begin downloading and installing the extension.
 
 #### Alternative method
