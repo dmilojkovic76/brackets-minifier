@@ -93,8 +93,8 @@ define(function (require, exports, module) {
     // Function to run when the menu item is clicked
     function compile() {
         status("Minifying...");
-        language = $("#status-language").text();
-        if (language !== "JavaScript" && language !== "CSS") {
+        language = (EditorManager.getActiveEditor()).document.extension;
+        if (language !== "js" && language !== "css") {
             console.log("File type not minifiable.");
             status("File type not minifiable.");
             delay = setTimeout(function () { status(""); }, 3000);
