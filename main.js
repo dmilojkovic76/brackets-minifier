@@ -59,7 +59,11 @@ define(function (require, exports, module) {
     
     function read(file, lan) {
         var editor = EditorManager.getActiveEditor();
-        if (lan === "JavaScript") {
+        if (file.name.match(new RegExp("\\.min\\." + lan))) {
+            console.log(file.name, lan);
+            status("File already minified");
+            delay = setTimeout(function () { status(""); }, 1000);
+        } else if (lan === "js") {
             var data = {
                 'compilation_level': 'SIMPLE_OPTIMIZATIONS',
                 'output_format': 'text',
@@ -77,14 +81,14 @@ define(function (require, exports, module) {
                 status("Minified");
                 delay = setTimeout(function () { status(""); }, 1000);
             });
-        } else if (lan === "CSS") {
+        } else if (lan === "css") {
             var mini = CSSMin.go(editor.document.getText());
             var path = file.fullPath.replace(".css", ".min.css");
             save(mini, path, file);
             status("Minified");
             delay = setTimeout(function () { status(""); }, 1000);
         } else {
-            status("File type not minifiable.");
+            status("File type not minifiable");
             delay = setTimeout(function () { status(""); }, 1000);
         }
         // populate(file);
@@ -93,10 +97,10 @@ define(function (require, exports, module) {
     // Function to run when the menu item is clicked
     function compile() {
         status("Minifying...");
-        language = (EditorManager.getActiveEditor()).document.extension;
+        language = (EditorManager.getActiveEditor()).document.file.name.split('.').pop();
         if (language !== "js" && language !== "css") {
-            console.log("File type not minifiable.");
-            status("File type not minifiable.");
+            console.log("File type not minifiable");
+            status("File type not minifiable");
             delay = setTimeout(function () { status(""); }, 3000);
             return;
         } else {
