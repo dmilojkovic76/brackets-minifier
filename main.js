@@ -83,6 +83,9 @@ define(function (require, exports, module) {
             save(mini, path, file);
             status("Minified");
             delay = setTimeout(function () { status(""); }, 1000);
+        } else {
+            status("File type not minifiable.");
+            delay = setTimeout(function () { status(""); }, 1000);
         }
         // populate(file);
     }
@@ -92,7 +95,9 @@ define(function (require, exports, module) {
         status("Minifying...");
         language = $("#status-language").text();
         if (language !== "JavaScript" && language !== "CSS") {
-            console.log("Language not JavaScript");
+            console.log("File type not minifiable.");
+            status("File type not minifiable.");
+            delay = setTimeout(function () { status(""); }, 3000);
             return;
         } else {
             code = "";
@@ -109,7 +114,7 @@ define(function (require, exports, module) {
         if (auto) {
             var fExt = doc.file.name.split(".").pop();
             
-            if (fExt === "js") {
+            if (fExt === "js" || fExt === "css") {
                 compile();
             }
         } else {
@@ -120,8 +125,8 @@ define(function (require, exports, module) {
     var menu = Menus.getMenu(Menus.AppMenuBar.EDIT_MENU);
     var cmd_min_id = "minifier.min";
     var cmd_auto_id = "minifier.auto";
-    CommandManager.register("Minify JavaScript", cmd_min_id, compile);
-    CommandManager.register("Compile on Save", cmd_auto_id, function () {
+    CommandManager.register("Minify", cmd_min_id, compile);
+    CommandManager.register("Minify on Save", cmd_auto_id, function () {
         this.setChecked(!this.getChecked());
     });
     
