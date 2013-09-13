@@ -75,11 +75,16 @@ define(function (require, exports, module) {
                 url: 'https://closure-compiler.appspot.com/compile',
                 type: 'POST',
                 data: data
-            }).done(function (mini) {
-                var path = file.fullPath.replace(".js", ".min.js");
-                save(mini, path, file);
-                status("Minified");
-                delay = setTimeout(function () { status(""); }, 1000);
+            }).always(function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 200) {
+                    var path = file.fullPath.replace(".js", ".min.js");
+                    save(jqXHR.responseText, path, file);
+                    status("Minified");
+                    delay = setTimeout(function () { status(""); }, 1000);
+                } else {
+                    status("Error Minifying");
+                    delay = setTimeout(function () { status(""); }, 3000);
+                }
             });
         } else if (lan === "css") {
             var mini = CSSMin.go(editor.document.getText());
