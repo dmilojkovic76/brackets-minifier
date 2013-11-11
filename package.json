@@ -1,5 +1,5 @@
 {
-    "name": "minifier",
+    "name": "brackets-minifier",
     "title": "Minifier",
     "description": "Minifies your CSS and JavaScript files with YUI and Google's Closure Compiler.",
     "homepage": "https://github.com/alfredxing/minifier",
