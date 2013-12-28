@@ -9,7 +9,7 @@ define(function(require, exports, module) {
         EditorManager = brackets.getModule("editor/EditorManager"),
         DocumentManager = brackets.getModule("document/DocumentManager"),
         FileUtils = brackets.getModule("file/FileUtils"),
-        NativeFileSystem = brackets.getModule("file/NativeFileSystem").NativeFileSystem,
+        FileSystem = brackets.getModule("filesystem/FileSystem"),
         ProjectManager = brackets.getModule("project/ProjectManager"),
         JSMin = require("vendor/jsmin").JSMin,
         CSSMin = require("vendor/cssmin").CSSMin;
@@ -32,31 +32,8 @@ define(function(require, exports, module) {
         tunnel.text(msg);
     }
 
-    function found(name) {
-        var exists = false;
-        $(".jstree-leaf a").each(function() {
-            if ($(this).text().substr(1) === name) {
-                exists = true;
-            }
-        });
-        return exists;
-    }
-
-    function save(code, path, entry) {
-        var split = path.split("/"),
-            name = split.pop(),
-            dir = split.join("/");
-        if (!found(name)) {
-            ProjectManager.createNewItem(dir, name, true, false);
-        }
-        var fileEntry = new NativeFileSystem.FileEntry(path),
-            lineEnding = "\n";
-        if (FileUtils.getPlatformLineEndings() === "CRLF") {
-            lineEnding = "\r\n";
-        }
-        FileUtils.writeText(fileEntry, code).done(function() {
-            console.log("done");
-        });
+    function save(code, path) {
+        FileSystem.getFileForPath(path).write(code, {}, ProjectManager.refreshFileTree);
     }
 
     function process(editor, lan) {
@@ -69,7 +46,7 @@ define(function(require, exports, module) {
         } else if (lan === "js") {
             var mini = JSMin.go(editor.document.getText(), 3).replace(/\n/, '');
             var path = file.fullPath.replace(".js", ".min.js");
-            save(mini, path, file);
+            save(mini, path);
             status("Minified");
             delay = setTimeout(function() {
                 status("");
@@ -77,7 +54,7 @@ define(function(require, exports, module) {
         } else if (lan === "css") {
             var mini = CSSMin.go(editor.document.getText());
             var path = file.fullPath.replace(".css", ".min.css");
-            save(mini, path, file);
+            save(mini, path);
             status("Minified");
             delay = setTimeout(function() {
                 status("");
