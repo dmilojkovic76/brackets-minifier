@@ -3,7 +3,7 @@
     "title": "Minifier",
     "description": "Minifies your CSS and JavaScript files with YUI and Google's Closure Compiler.",
     "homepage": "https://github.com/alfredxing/minifier",
-    "version": "0.5.0",
+    "version": "1.0.0",
     "author": "Alfred Xing (http://alfredxing.com)",
     "license": "https://github.com/alfredxing/minifier#license",
     "engines": {
