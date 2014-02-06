@@ -1,7 +1,7 @@
 {
     "name": "brackets-minifier",
     "title": "Minifier",
-    "description": "Minifies your CSS and JavaScript files with YUI and Google's Closure Compiler.",
+    "description": "Minifies your CSS and JavaScript files with YUI and JSMin.",
     "homepage": "https://github.com/alfredxing/minifier",
     "version": "1.0.0",
     "author": "Alfred Xing (http://alfredxing.com)",
@@ -14,6 +14,8 @@
         "js",
         "minify",
         "optimization",
-        "min"
+        "min",
+        "yui",
+        "jsmin"
     ]
 }
