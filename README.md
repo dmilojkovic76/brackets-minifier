@@ -14,7 +14,3 @@ Clone this repository into `~/Library/Application Support/Brackets/extensions/us
 
 ## Usage
 To minify a file, use the keyboard shortcut `Cmd/Ctrl+M`. You can also minify files on save by checking the corresponding item in the *Edit* menu.
-
-## Version
-
-`Version 1.0.1`
