@@ -33,7 +33,7 @@ define(function(require, exports, module) {
     }
 
     function save(code, path) {
-        FileSystem.getFileForPath(path).write(code, {}, ProjectManager.refreshFileTree);
+        FileSystem.getFileForPath(path).write(code, {});
     }
 
     function process(editor, lan) {
