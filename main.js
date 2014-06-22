@@ -52,7 +52,7 @@ define(function(require, exports, module) {
                 status("");
             }, 1000);
         } else if (lan === "css") {
-            var mini = CSSMin.go(editor.document.getText());
+            var mini = CSSMin.cssmin(editor.document.getText());
             var path = file.fullPath.replace(".css", ".min.css");
             save(mini, path);
             status("Minified");
