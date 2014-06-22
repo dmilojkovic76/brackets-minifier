@@ -10,7 +10,6 @@ define(function(require, exports, module) {
         DocumentManager = brackets.getModule("document/DocumentManager"),
         FileUtils = brackets.getModule("file/FileUtils"),
         FileSystem = brackets.getModule("filesystem/FileSystem"),
-        ProjectManager = brackets.getModule("project/ProjectManager"),
         JSMin = require("vendor/jsmin").JSMin,
         CSSMin = require("vendor/cssmin").CSSMin;
 
@@ -102,12 +101,15 @@ define(function(require, exports, module) {
     });
 
     var menu = Menus.getMenu(Menus.AppMenuBar.EDIT_MENU);
+    var contextMenu = Menus.getContextMenu(Menus.ContextMenuIds.EDITOR_MENU);
     var cmd_min_id = "minifier.min";
     var cmd_auto_id = "minifier.auto";
+    var cmd_context_id = "minifier.context";
     CommandManager.register("Minify", cmd_min_id, compile);
     CommandManager.register("Minify on Save", cmd_auto_id, function() {
         this.setChecked(!this.getChecked());
     });
+    CommandManager.register("Minify", cmd_context_id, compile);
 
     var automaton = CommandManager.get(cmd_auto_id);
     automaton.setChecked(auto);
@@ -117,9 +119,10 @@ define(function(require, exports, module) {
         localStorage["minifier.auto"] = auto;
     });
 
-    menu.addMenuItem('minifier.min', "Ctrl-M");
+    menu.addMenuItem(cmd_min_id, "Ctrl-M");
     menu.addMenuItem(automaton);
     menu.addMenuDivider('before', 'minifier.min');
+    contextMenu.addMenuItem(cmd_context_id, "Ctrl-M");
 
     automaton.setChecked(auto);
 });
