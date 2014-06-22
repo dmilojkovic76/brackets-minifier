@@ -2,10 +2,10 @@
     "name": "brackets-minifier",
     "title": "Minifier",
     "description": "Minifies your CSS and JavaScript files with YUI and JSMin.",
-    "homepage": "https://github.com/alfredxing/minifier",
-    "version": "1.0.1",
-    "author": "Alfred Xing (http://alfredxing.com)",
-    "license": "https://github.com/alfredxing/minifier#license",
+    "homepage": "https://github.com/wylst/minifier",
+    "version": "1.0.2",
+    "author": "Wylst (http://wylst.com)",
+    "license": "https://github.com/wylst/minifier#license",
     "engines": {
         "brackets": ">=0.24.0"
     },
