@@ -1,6 +1,6 @@
 # Minifier for [Brackets](https://github.com/adobe/brackets)
 
-*Minifies JavaScript and CSS files in Brackets and saves to `{filename}.min.{ext}` using JSMin (for JavaScript) and YUI (for CSS).*
+*Minifies JavaScript and CSS files in Brackets and saves to `{filename}.min.{ext}` using UglifyJS2 (for JavaScript) and YUI (for CSS).*
 
 ## Installation
 
