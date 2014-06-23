@@ -10,7 +10,8 @@ define(function(require, exports, module) {
         DocumentManager = brackets.getModule("document/DocumentManager"),
         FileUtils = brackets.getModule("file/FileUtils"),
         FileSystem = brackets.getModule("filesystem/FileSystem"),
-        JSMin = require("vendor/jsmin").JSMin,
+        // JSMin = require("vendor/jsmin").JSMin,
+        UglifyJS = require("vendor/uglifyjs").UglifyJS,
         CSSMin = require("vendor/cssmin").CSSMin;
 
     var language = $("#status-language").text(),
@@ -26,6 +27,10 @@ define(function(require, exports, module) {
 
     $("#status-indicators").prepend('<div id="min-status" style="text-align: right;"></div>');
     var tunnel = $("#min-status");
+
+    // Add JSMin
+    var uglifyjsPath = require.toUrl("./vendor/uglifyjs.js");
+    $("body").append("<script src=\"" + uglifyjsPath + "\">");
 
     function status(msg) {
         tunnel.text(msg);
@@ -43,7 +48,12 @@ define(function(require, exports, module) {
                 status("");
             }, 1000);
         } else if (lan === "js") {
-            var mini = JSMin.go(editor.document.getText(), 3).replace(/\n/, '');
+            var ast = UglifyJS.parse(editor.document.getText());
+            ast.figure_out_scope();
+            ast.compute_char_frequency();
+            var ast = ast.transform(UglifyJS.Compressor());
+            ast.mangle_names();
+            var mini = ast.print_to_string();
             var path = file.fullPath.replace(".js", ".min.js");
             save(mini, path);
             status("Minified");
@@ -104,12 +114,10 @@ define(function(require, exports, module) {
     var contextMenu = Menus.getContextMenu(Menus.ContextMenuIds.EDITOR_MENU);
     var cmd_min_id = "minifier.min";
     var cmd_auto_id = "minifier.auto";
-    var cmd_context_id = "minifier.context";
     CommandManager.register("Minify", cmd_min_id, compile);
     CommandManager.register("Minify on Save", cmd_auto_id, function() {
         this.setChecked(!this.getChecked());
     });
-    CommandManager.register("Minify", cmd_context_id, compile);
 
     var automaton = CommandManager.get(cmd_auto_id);
     automaton.setChecked(auto);
@@ -122,7 +130,7 @@ define(function(require, exports, module) {
     menu.addMenuItem(cmd_min_id, "Ctrl-M");
     menu.addMenuItem(automaton);
     menu.addMenuDivider('before', 'minifier.min');
-    contextMenu.addMenuItem(cmd_context_id, "Ctrl-M");
+    contextMenu.addMenuItem(cmd_min_id);
 
     automaton.setChecked(auto);
 });
