@@ -3,7 +3,7 @@
     "title": "Minifier",
     "description": "Minifies your CSS and JavaScript files with YUI and JSMin.",
     "homepage": "https://github.com/wylst/brackets-minifier",
-    "version": "1.0.3",
+    "version": "1.1.0",
     "author": "Wylst (http://wylst.com)",
     "license": "https://github.com/wylst/brackets-minifier#license",
     "engines": {
