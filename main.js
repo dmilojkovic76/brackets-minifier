@@ -10,7 +10,7 @@ define(function(require, exports, module) {
         DocumentManager = brackets.getModule("document/DocumentManager"),
         FileUtils = brackets.getModule("file/FileUtils"),
         FileSystem = brackets.getModule("filesystem/FileSystem"),
-        // JSMin = require("vendor/jsmin").JSMin,
+        PreferencesManager = brackets.getModule("preferences/PreferencesManager"),
         UglifyJS = require("vendor/uglifyjs").UglifyJS,
         CSSMin = require("vendor/cssmin").CSSMin;
 
@@ -18,13 +18,14 @@ define(function(require, exports, module) {
         code = "",
         result = "",
         delay,
-        auto = (localStorage["minifier.auto"] === "true");
+        prefs = PreferencesManager.getExtensionPrefs("brackets-minifier");
 
-    if (typeof localStorage["minifier.auto"] === "undefined") {
-        auto = false;
-        localStorage["minifier.auto"] = false;
-    }
+    // Define preferences
+    prefs.definePreference("on-save", "boolean", false);
+    prefs.definePreference("js-mangle", "boolean", true);
+    prefs.definePreference("js-compress", "boolean", true);
 
+    // Set up indicator
     $("#status-indicators").prepend('<div id="min-status" style="text-align: right;"></div>');
     var tunnel = $("#min-status");
 
@@ -51,8 +52,10 @@ define(function(require, exports, module) {
             var ast = UglifyJS.parse(editor.document.getText());
             ast.figure_out_scope();
             ast.compute_char_frequency();
-            var ast = ast.transform(UglifyJS.Compressor());
-            ast.mangle_names();
+            if (prefs.get("js-compress"))
+                ast = ast.transform(UglifyJS.Compressor());
+            if (prefs.get("js-mangle"))
+                ast.mangle_names();
             var mini = ast.print_to_string();
             var path = file.fullPath.replace(".js", ".min.js");
             save(mini, path);
@@ -98,15 +101,14 @@ define(function(require, exports, module) {
     }
 
     $(DocumentManager).on("documentSaved", function(event, doc) {
-        if (auto) {
+        if (prefs.get("on-save")) {
             var fExt = doc.file.name.split(".").pop();
 
             if (fExt === "js" || fExt === "css") {
                 compile();
+            } else {
+                status("File type not minifiable");
             }
-        } else {
-            status("File type not minifiable");
-            return;
         }
     });
 
@@ -120,11 +122,9 @@ define(function(require, exports, module) {
     });
 
     var automaton = CommandManager.get(cmd_auto_id);
-    automaton.setChecked(auto);
 
     $(automaton).on('checkedStateChange', function() {
-        auto = automaton.getChecked();
-        localStorage["minifier.auto"] = auto;
+        prefs.set("on-save", automaton.getChecked());
     });
 
     menu.addMenuItem(cmd_min_id, "Ctrl-M");
@@ -132,5 +132,5 @@ define(function(require, exports, module) {
     menu.addMenuDivider('before', 'minifier.min');
     contextMenu.addMenuItem(cmd_min_id);
 
-    automaton.setChecked(auto);
+    automaton.setChecked(prefs.get("on-save"));
 });
