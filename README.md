@@ -1,6 +1,8 @@
 > ### Notice
 > This package and repository is no longer being maintained. Feel free, as always, to fork and make your own versions!
 > My apologies for having to close down this project; I simply don't have enough time anymore to keep track of all the API changes in Brackets required to keep this working.
+>
+> For an alternative minifier based off this one, take a look at [@abagshaw's fork](https://github.com/abagshaw/brackets-minifier)
 
 # Minifier for [Brackets](https://github.com/adobe/brackets)
 
